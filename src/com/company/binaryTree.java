@@ -31,7 +31,7 @@ class binaryTree {
 
     public boolean isTreeEmpty()
     {
-    return (root == null)
+    return (root == null);
     }
 
 
@@ -53,7 +53,7 @@ class binaryTree {
         return false;
     }
 
-    public insert(char value)
+    public static void insert(String value)
     {
 
         binaryTree.treeNode newNode = new binaryTree.treeNode(value);

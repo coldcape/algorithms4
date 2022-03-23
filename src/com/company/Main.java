@@ -1,28 +1,26 @@
 package com.company;
 
 import java.io.*;
+import java.util.Scanner;
 
 public class Main {
 
     public static void main (String[] argv)
     {
-        BufferedReader r =
-                new BufferedReader(new InputStreamReader(System.in));
-        StreamTokenizer input = new StreamTokenizer(r);
+        Scanner scanner = new Scanner("textInput.txt");
 
-        try
-        {
-            int x = input.nextToken();
-            while (x != input.TT_EOF)
-            {
-                if (input.ttype == input.TT_WORD)
-                    System.out.println(input.sval);
-                x = input.nextToken ();
+        while (scanner.hasNext()){
+            System.out.println(scanner.next());
+            String linje = scanner.nextLine();
+            String[] ord = linje.split("[\\s\\p{Punct}]+");
+
+            for (int i = 0; i < ord.length; i++){
+                ord[i].toUpperCase();
+                binaryTree.insert(ord[i].toUpperCase());
             }
         }
-        catch (IOException e) {};
 
-        binaryTree()
+
     }
 
 }
