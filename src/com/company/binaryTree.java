@@ -1,99 +1,139 @@
-package com.company;public
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Objects;
+import java.util.Scanner;
 
+public class binaryTree {
 
-class binaryTree {
+    private static class textNode{
+        String data;
+        textNode left, right;
 
-    private class treeNode{
+        public int count = 1;
 
-        char data;
-        treeNode left;
-        treeNode right;
-
-        public treeNode(char value){
-
-            data = value;
+        public textNode(String data){
+            this.data = data;
             left = right = null;
         }
 
-        void write(){
-
-            System.out.println(data );
-        }
-    }
-
-    // Root of search tree
-    private binaryTree.treeNode root;
-
-    public void binarySearchTree()
-    {
-        root = null;
-    }
-
-    public boolean isTreeEmpty()
-    {
-    return (root == null);
-    }
-
-
-    public boolean search(char value)
-    {
-        binaryTree.treeNode current = root;
-
-        while (current != null)
-        {
-
-        if (current.data == value)
-            return true;
-        if (value < current.data)
-            current = current.left;
-        else
-            current = current.right;
-
-        }
-        return false;
-    }
-
-    public static void insert(String value)
-    {
-
-        binaryTree.treeNode newNode = new binaryTree.treeNode(value);
-
-        if (isTreeEmpty())
-        {
-
-            root = newNode;
-            return;
-
+        void write (){
+            System.out.print(data + " x" + count + ", ");
         }
 
-        binaryTree.treeNode current = root;
-        boolean finished = false;
+        public void addNode(String data) {
+            if (this.data == null) {
+                this.data = data;
+            } else {
+                if (this.data.compareTo(data) < 0) {
+                    if (this.left != null) {
+                        this.left.addNode(data);
+                    }
+                    else {
+                        this.left = new textNode(data);
+                    }
 
-        while (!finished)
-        {
+                } else {
+                    if (this.right != null) {
+                        this.right.addNode(data);
+                    } else {
+                        this.right = new textNode(data);
+                    }
 
-            if (value < current.data)
-            {
-                if (current.left == null)
-                {
-                    current.left = newNode;
-                    finished = true;
                 }
-                else
-                    current = current.right;
+            }
+        }
+
+        public void inOrder(textNode data){
+            if (data != null){
+                inOrder(data.right);
+                data.write();
+                inOrder(data.left);
+
+            }
+        }
+
+        boolean contains(textNode root, String x) {
+            if (root == null)
+                return false;
+            if (Objects.equals(root.data, x)) {
+                root.count += 1;
+                return true;
             }
 
-            else
-            {
-             if (current.right == null)
-             {
-                 current.right = newNode;
-                 finished = true;
-             }
-             else
-                 current = current.right;
+            return (contains(root.left, x) || contains(root.right, x));
+        }
+
+    }
+
+    public static textNode createTree(String data ) {
+        textNode tree = new textNode(data);
+        if( data != null ) {
+
+            data = data.replaceAll("[^a-zA-Z0-9]", " ");
+            String[] words = data.split( " ");
+
+            tree = new textNode(null);
+            for (String word : words) {
+                if (!tree.contains(tree, word)) {
+                    tree.addNode(word);
+                }
             }
 
         }
+        return tree;
     }
+
+
+    public static void mainProgram() throws FileNotFoundException {
+
+        Scanner scan = new Scanner(System.in);
+        File file = new File("textInput.txt");
+        Scanner read = new Scanner(file);
+        String freetxt;
+
+        System.out.println("""
+                 Welcome to text analysis
+                 Choose starting method:
+                 Keyboard input: 1
+                 File input: 2
+                 
+                 WORDS ARE SORTED FROM BOTTOM(LEFT) TO TOP(RIGHT)""");
+
+        int ans = scan.nextInt();
+        scan.nextLine();
+
+        switch (ans){
+
+            case 1 -> {
+                System.out.println("Enter your free text");
+                freetxt = scan.nextLine();
+                keyInput(freetxt.toUpperCase());
+            }
+
+            case 2 -> {
+                while(read.hasNextLine()){
+                    freetxt = read.nextLine();
+                    keyInput(freetxt.toUpperCase());
+                }
+
+            }
+        }
+
+    }
+
+    public static void keyInput(String txt) {
+        textNode tester = createTree(txt.toUpperCase());
+        System.out.println("\nIN ORDER: ");
+        tester.inOrder(tester);
+
+    }
+
+
+
+
+
+    public static void main(String[] args) throws FileNotFoundException {
+        mainProgram();
+    }
+
 }
